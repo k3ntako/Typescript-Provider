@@ -3,44 +3,28 @@ const EpisodeList = lazy<any>(() => import('./EpisodeList'));
 
 import styles from '../App.css';
 import { Store } from '../utilities/Store';
-import { IAction, IEpisode, IEpisodeListProps } from '../utilities/interfaces';
+import { IEpisodeListProps } from '../utilities/interfaces';
+import { fetchDataAction, toggleFavorite } from '../utilities/Actions';
 
 const Homepage = () => {
   const { state, dispatch } = useContext(Store);
 
   useEffect(() => {
-    state.episodes.length === 0 && fetchDataAction();
+    state.episodes.length === 0 && fetchDataAction(dispatch);
   })
-
-  const fetchDataAction = async () => {
-    const URL = 'https://api.tvmaze.com/singlesearch/shows?q=friends&embed=episodes';
-    const data = await fetch(URL)
-    const dataJSON = await data.json();
-
-    return dispatch({
-      type: 'FETCH_DATA',
-      payload: dataJSON._embedded.episodes,
-    })
-  }
-
-  const toggleFavorite = (episode: IEpisode, episodeInFav: boolean): IAction => {
-    return dispatch({
-      type: episodeInFav ? 'REMOVE_FAV' : 'ADD_FAV',
-      payload: episode,
-    });
-  }
 
   const props: IEpisodeListProps = {
     episodes: state.episodes,
+    store: {state, dispatch},
     toggleFavorite: toggleFavorite,
     favorites: state.favorites,
   }
 
-  return <section className={styles.episodesLayout}>
-    <Suspense fallback={<div>Loading...</div>}>
+  return <Suspense fallback={<div>Loading...</div>}>
+    <section className={styles.episodesLayout}>
       <EpisodeList {...props} />
-    </Suspense>
-  </section>
+    </section>
+  </Suspense>
 };
 
 export default Homepage;

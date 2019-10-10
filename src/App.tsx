@@ -4,7 +4,7 @@ import { Link } from '@reach/router';
 import styles from './App.css';
 import { Store } from './utilities/Store';
 
-const App = (props: any): JSX.Element => {
+const App = (props: Element): JSX.Element => {
   const { state } = useContext(Store);
 
   return <div>
@@ -16,8 +16,6 @@ const App = (props: any): JSX.Element => {
       <div>
         <Link to="/">Home</Link>
         <Link to="/faves">Faves</Link>
-        <Link to="/">Home</Link>
-        <Link to="/">Home</Link>
       </div>
     </header>
     { props.children }

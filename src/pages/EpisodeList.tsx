@@ -1,11 +1,12 @@
 import React from 'react';
 
 import styles from '../App.css';
-import { IEpisode } from '../utilities/interfaces';
+import { IEpisode, IEpisodeListProps } from '../utilities/interfaces';
 
 //JSX.Element[] is the same as Array<JSX.Element>
-export default (props:any):JSX.Element[] => {
-  const { episodes, favorites, toggleFavorite } = props;
+export default (props: IEpisodeListProps):JSX.Element[] => {
+  const { episodes, favorites, toggleFavorite, store } = props;
+  const { state, dispatch } = store;
   
   return episodes.map((episode: IEpisode): JSX.Element => {
     if (!episode.season || !episode.name || !episode.image || !episode.image.medium) {
@@ -23,7 +24,7 @@ export default (props:any):JSX.Element[] => {
       </div>
       <section className={styles.episodeInfo}>
         <div>Season: {episode.season} Episode: {episode.number}</div>
-        <button type="button" onClick={() => toggleFavorite(episode, episodeInFav)}>
+        <button type="button" onClick={() => toggleFavorite(dispatch, state, episode )}>
           {episodeInFav ? 'Unfav' : 'Fav'}
         </button>
       </section>
