@@ -1,7 +1,7 @@
 import React from 'react';
 
-import styles from './App.css';
-import { IAction, IEpisode } from './interfaces';
+import styles from '../App.css';
+import { IEpisode } from '../utilities/interfaces';
 
 //JSX.Element[] is the same as Array<JSX.Element>
 export default (props:any):JSX.Element[] => {

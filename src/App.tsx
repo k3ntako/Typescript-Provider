@@ -1,42 +1,12 @@
-import React, { useContext, useEffect, lazy, Suspense } from 'react';
-import ReactDOM from 'react-dom';
-const EpisodeList = lazy<any>(() => import('./EpisodeList'))
+import React, { useContext } from 'react';
+import { Link } from '@reach/router';
 
 import styles from './App.css';
-import { Store } from './Store';
-import { IAction, IEpisode } from './interfaces';
+import { Store } from './utilities/Store';
 
-const App = (): JSX.Element => {
-  const { state, dispatch } = useContext(Store);
+const App = (props: any): JSX.Element => {
+  const { state } = useContext(Store);
 
-  useEffect(() => {
-    state.episodes.length === 0 && fetchDataAction();
-  })
-
-  const fetchDataAction = async () =>{
-    const URL = 'https://api.tvmaze.com/singlesearch/shows?q=friends&embed=episodes';
-    const data = await fetch(URL)
-    const dataJSON = await data.json();
-    
-    return dispatch({
-      type: 'FETCH_DATA',
-      payload: dataJSON._embedded.episodes,
-    })
-  }
-
-  const toggleFavorite = (episode:IEpisode, episodeInFav:boolean):IAction => {
-    return dispatch({
-      type: episodeInFav ? 'REMOVE_FAV' : 'ADD_FAV',
-      payload: episode,
-    });
-  }
-
-  const props = {
-    episodes: state.episode,
-    toggleFavorite: toggleFavorite,
-    favorite: state.favorite,
-  }
-  
   return <div>
     <header className={styles.header}>
       <div>
@@ -44,14 +14,13 @@ const App = (): JSX.Element => {
         <p>Pick your favorite episodes!</p>
       </div>
       <div>
-        <p>Favorited: {state.favorites.length} episode(s)</p>
+        <Link to="/">Home</Link>
+        <Link to="/faves">Faves</Link>
+        <Link to="/">Home</Link>
+        <Link to="/">Home</Link>
       </div>
     </header>
-    <section className={styles.episodesLayout}>
-      <Suspense  fallback={<div>Loading...</div>}>
-        <EpisodeList episodes={state.episodes} favorites={state.favorites} toggleFavorite={toggleFavorite} />
-      </Suspense>
-    </section>
+    { props.children }
   </div>
 }
 

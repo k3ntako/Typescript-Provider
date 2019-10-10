@@ -20,3 +20,9 @@ export interface IEpisode{
   summary: string
   url: string
 };
+
+export interface IEpisodeListProps{
+  episodes: Array<IEpisode>
+  toggleFavorite: (episode: IEpisode, episodeInFav:boolean) => IAction
+  favorites: Array<IEpisode>
+}
